@@ -2,7 +2,7 @@
 import { Button, Input } from "@nextui-org/react";
 import { useState } from "react";
 
-export default function addproduct() {
+export default function Addproduct() {
     const [value, setValue] = useState({ name: '', model: '', price: '', description: '' });
 
     const handleInput = (e) => {
