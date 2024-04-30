@@ -1,8 +1,9 @@
 "use client"
-import { Button, Input, Link } from "@nextui-org/react";
-import { useState } from "react";
+import { Button, Input } from "@nextui-org/react";
+import { useState, useEffect } from "react";
 
-export default function Addproduct() {
+export default function Update({ params }) {
+
     const [value, setValue] = useState({ name: '', model: '', price: '', description: '' });
 
     const handleInput = (e) => {
@@ -13,35 +14,31 @@ export default function Addproduct() {
         }));
     };
 
-    const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-        const response = await fetch("http://localhost:3000/api/products", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(value)
-        });
-        
-        if (!response.ok) {
-            throw new Error("Failed to add product");
-        }
-        
-        const result = await response.json();
-        if (result.success) {
-            alert("New product added");
-        }
-        setValue(
-            {
-                name: '', model: '', price: '', description: ''
-            }
-        )
-    } catch (error) {
-        console.error("Error:", error.message);
-        alert("Failed to add product");
+    useEffect(() => {
+        setDetails()
+    }, [])
+
+    const setDetails = async () => {
+        const id = params.singleproduct
+        // console.log(id)
+        // const data = await fetch(`http://localhost:3000/productList/${id}`)
+        // const result = await data.json()
+        // console.log(result)
+        // if (result) {
+        //     setValue({
+        //         name: result.result.name,
+        //         model: result.result.model,
+        //         price: result.result.price,
+        //         description: result.result.description
+        //     })
+        // } else {
+        //     throw new Error("facing error")
+        // }
     }
-};
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+    };
 
 
     return (
@@ -57,7 +54,6 @@ export default function Addproduct() {
 
                     <Button type="button" color="secondary" variant="bordered" onClick={handleSubmit}>Submit</Button>
                 </form>
-                <Button className="self-end" as={Link} href="/productList" showAnchorIcon>Go to Product List from here</Button>
             </div>
         </>
     );
