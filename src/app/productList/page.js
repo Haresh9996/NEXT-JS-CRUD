@@ -1,11 +1,12 @@
 import Deletebtn from "@/utils/model/Deletebtn";
 import { Link, Button, Kbd } from "@nextui-org/react";
-import { BASE_API_URL } from "@/utils/db";
+// import { BASE_API_URL } from "@/utils/db";
+import { apiUrl } from "@/utils/api";
 
 let fetchData = async () => {
     try {
-        // let response = await fetch(BASE_API_URL+"/api/products", { cache: 'no-store' });
-        let response = await fetch("http://localhost:3000/api/products", { cache: 'no-store' });
+        let response = await fetch(apiUrl+"/api/products", { cache: 'no-store' });
+        // let response = await fetch("http://localhost:3000/api/products", { cache: 'no-store' });
 
         if (!response.ok) {
             throw new Error("Failed to fetch products");

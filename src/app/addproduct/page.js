@@ -1,8 +1,9 @@
 "use client"
+import { apiUrl } from "@/utils/api";
 import { Button, Input, Link } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { BASE_API_URL } from "@/utils/db";
+// import { BASE_API_URL } from "@/utils/db";
 
 export default function Addproduct() {
     let router = useRouter()
@@ -11,14 +12,13 @@ export default function Addproduct() {
     let [price, setPrice] = useState("")
     let [description, setDescription] = useState("")
 
-    console.log(BASE_API_URL)
 
     const handleSubmit = async (e) => {
 
         e.preventDefault();
         try {
-            // let response = await fetch(`${BASE_API_URL}/api/products`, {
-            let response = await fetch(`http://localhost:3000/api/products`, {
+            let response = await fetch(`${apiUrl}/api/products`, {
+            // let response = await fetch(`http://localhost:3000/api/products`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

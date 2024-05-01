@@ -3,6 +3,7 @@
 import { Button } from "@nextui-org/react";
 import { BASE_API_URL } from "../db";
 import { useRouter } from "next/navigation";
+import { apiUrl } from "../api";
 
 export default function Deletebtn(props) {
     let router = useRouter()
@@ -12,8 +13,8 @@ export default function Deletebtn(props) {
         let id = props.id;
 
         try {
-            // const response = await fetch(`${BASE_API_URL}/api/products/${id}`, {
-            const response = await fetch(`http://localhost:3000/api/products/${id}`, {
+            const response = await fetch(`${apiUrl}/api/products/${id}`, {
+            // const response = await fetch(`http://localhost:3000/api/products/${id}`, {
                 method: "DELETE"
             });
 
