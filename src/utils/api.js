@@ -1,0 +1,1 @@
+export const apiUrl = "https://next-js-crud-six.vercel.app"

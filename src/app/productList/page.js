@@ -1,10 +1,12 @@
 import Deletebtn from "@/utils/model/Deletebtn";
 import { Link, Button, Kbd } from "@nextui-org/react";
-import { BASE_API_URL } from "@/utils/db";
+// import { BASE_API_URL } from "@/utils/db";
+import { apiUrl } from "@/utils/api";
 
 let fetchData = async () => {
     try {
-        let response = await fetch(BASE_API_URL+"/api/products", { cache: 'no-store' });
+        let response = await fetch(apiUrl+"/api/products", { cache: 'no-store' });
+        // let response = await fetch("http://localhost:3000/api/products", { cache: 'no-store' });
 
         if (!response.ok) {
             throw new Error("Failed to fetch products");
@@ -28,7 +30,7 @@ export default async function productsList() {
                 <div className="flex flex-col gap-4 min-h-[100dvh]">
                     <h2 className="text-4xl text-center mb-6">Products List</h2>
                     <Button className="self-end" as={Link} href="/addproduct">Add Product from here</Button>
-                    <Kbd keys={["command", "shift"]} className="self-end">+ F5 (for hard refresh after add product)</Kbd>
+                    <Kbd keys={["command", "shift"]} className="self-end">+ F5 (for hard refresh)</Kbd>
                     <table className="max-w-[800px] m-auto">
                         <thead className="border-1">
                             <tr>
