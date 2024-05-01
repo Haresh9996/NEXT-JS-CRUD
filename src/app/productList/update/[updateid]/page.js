@@ -1,46 +1,61 @@
 "use client"
 import { Button, Input, Link } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BASE_API_URL } from "@/utils/db";
 
-export default function Addproduct() {
+export default function Update({ params }) {
+    let productId = params.updateid
+    console.log(productId)
     let router = useRouter()
     let [name, setName] = useState("")
     let [model, setModel] = useState("")
     let [price, setPrice] = useState("")
     let [description, setDescription] = useState("")
 
-    console.log(BASE_API_URL)
+    useEffect(() => {
+        handleInputs()
 
-    const handleSubmit = async (e) => {
+    }, [])
 
-        e.preventDefault();
-        try {
-            let response = await fetch(`${BASE_API_URL}/api/products`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ name, model, price, description })
-            });
-            response = await response.json();
-            console.log(response)
-            alert("product added sucessfully")
+    const handleInputs = async () => {
 
-        } catch (error) {
-            console.error("Error:", error.message);
-            alert("Failed to add product");
+        let result = await fetch(`${BASE_API_URL}/api/products/${productId}`)
+        result = await result.json()
+        let { description, model, name, price } = result.message
+
+        if (result.success) {
+            setName(name)
+            setModel(model)
+            setPrice(price)
+            setDescription(description)
+        } else {
+            alert("Can't Update Data!!!")
         }
 
-        router.push("/productList")
-    };
+    }
 
+    const handleSubmit = async () => {
+        try {
+            let result = await fetch(`${BASE_API_URL}/api/products/${productId}`, {
+                method: 'put',
+                body: JSON.stringify({ description, model, name, price })
+            })
+            result = await result.json()
+            console.log(result)
+            alert("Product Updated sucessfully")
+
+        } catch (error) {
+            alert("Data doesn't Upadate due to ", error)
+            console.log(error)
+        }
+        router.push("/productList")
+    }
 
     return (
         <>
             <div className="min-h-[100dvh] flex flex-col gap-12 items-center justify-center">
-                <h2 className="text-4xl text-indigo-800">Add Products</h2>
+                <h2 className="text-4xl text-indigo-800">Update Products</h2>
                 <form className="grid gap-4">
                     <Input type="text" variant="bordered" label="Product Name" color="secondary" name="name" value={name} onChange={(e) => setName(e.target.value)} />
                     <Input type="text" variant="bordered" label="Product Model" color="secondary" name="model" value={model} onChange={(e) => setModel(e.target.value)} />
@@ -52,5 +67,5 @@ export default function Addproduct() {
                 <Button className="self-end" as={Link} href="/productList" showAnchorIcon>Go to Product List from here</Button>
             </div>
         </>
-    );
-}
+    )
+};
