@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BASE_API_URL } from "@/utils/db";
 
-export default function update({ params }) {
+export default function Update({ params }) {
     let productId = params.updateid
     console.log(productId)
     let router = useRouter()
