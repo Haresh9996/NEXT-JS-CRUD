@@ -10,7 +10,7 @@ export async function GET(request) {
         console.log(data)
         return NextResponse.json({ message: data, success: true }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ message: error, success: false }, { status: 400 })
+        return NextResponse.json({ message: error, success: false }, { status: 400, statusText: "request not resolve" })
     }
 }
 

@@ -1,25 +1,37 @@
 "use client"
 
 import { Button } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { BASE_API_URL } from "../db";
 
-export default function Deletebtn({_id}) {
-    let route = useRouter()
+export default function Deletebtn(props) {
+
     // console.log(props)
     const deleteData = async () => {
-        let response = await fetch(`http://localhost:3000/productList/${_id}`,{
-            method: "delete"
-        })
-        let finalData = response.json();
-        if(finalData.success){
-            alert("Product Deleted")
-            route.push('/productList')
+        let id = props.id;
+
+        try {
+            const response = await fetch(`${BASE_API_URL}/api/products/${id}`, {
+                method: "DELETE"
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    alert("Product Deleted!!!");
+                } else {
+                    alert("Product deletion failed. Please try again.");
+                }
+            } else {
+                throw new Error(`Failed to delete product. Status: ${response.status}`);
+            }
+
+        } catch (error) {
+            alert("Product deletion failed. Please try again.");
+            console.error("Error deleting product:", error);
         }
 
     }
 
 
-    return (
-        <Button color="danger" variant="bordered" onClick={deleteData} > Delete </Button>
-    )
+    return <Button color="danger" variant="bordered" onClick={deleteData} > Delete </Button>
 };
