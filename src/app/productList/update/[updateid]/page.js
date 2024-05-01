@@ -2,7 +2,7 @@
 import { Button, Input, Link } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BASE_API_URL } from "@/utils/db";
+// import { BASE_API_URL } from "@/utils/db";
 
 export default function Update({ params }) {
     let productId = params.updateid
@@ -20,7 +20,8 @@ export default function Update({ params }) {
 
     const handleInputs = async () => {
 
-        let result = await fetch(`${BASE_API_URL}/api/products/${productId}`)
+        // let result = await fetch(`${BASE_API_URL}/api/products/${productId}`)
+        let result = await fetch(`http://localhost:3000/api/products/${productId}`)
         result = await result.json()
         let { description, model, name, price } = result.message
 
@@ -37,19 +38,20 @@ export default function Update({ params }) {
 
     const handleSubmit = async () => {
         try {
-            let result = await fetch(`${BASE_API_URL}/api/products/${productId}`, {
+            // let result = await fetch(`${BASE_API_URL}/api/products/${productId}`, {
+            let result = await fetch(`http://localhost:3000/api/products/${productId}`, {
                 method: 'put',
                 body: JSON.stringify({ description, model, name, price })
             })
             result = await result.json()
             console.log(result)
             alert("Product Updated sucessfully")
-
+            router.push("/productList")
+            
         } catch (error) {
             alert("Data doesn't Upadate due to ", error)
             console.log(error)
         }
-        router.push("/productList")
     }
 
     return (

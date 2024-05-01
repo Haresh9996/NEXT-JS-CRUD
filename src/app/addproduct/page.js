@@ -17,7 +17,8 @@ export default function Addproduct() {
 
         e.preventDefault();
         try {
-            let response = await fetch(`${BASE_API_URL}/api/products`, {
+            // let response = await fetch(`${BASE_API_URL}/api/products`, {
+            let response = await fetch(`http://localhost:3000/api/products`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -27,13 +28,12 @@ export default function Addproduct() {
             response = await response.json();
             console.log(response)
             alert("product added sucessfully")
+            router.push("/productList")
 
         } catch (error) {
             console.error("Error:", error.message);
             alert("Failed to add product");
         }
-
-        router.push("/productList")
     };
 
 
