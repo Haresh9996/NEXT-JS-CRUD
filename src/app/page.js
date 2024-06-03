@@ -1,12 +1,22 @@
-import { Link } from "@nextui-org/react"
+
+import Head from "next/head"
+import ProductTable from "./_Components/ProductTable"
+import AddProduct from "./_Components/AddProducts"
 export default function page() {
-  return(
+
+  return (
     <>
-    <div className="flex min-h-[100dvh] items-center justify-center flex-col gap-5">
-      <h2>Products data Management</h2>
-      <Link href="/productList" underline="hover" color="secondary" showAnchorIcon>Go to Product List</Link>
-      <Link href="/addproduct" underline="hover" color="secondary" showAnchorIcon>Go to Add Product</Link>
-    </div>
+      <div>
+        <Head>
+          <title>Product List</title>
+          <meta name="description" content="Product List" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+
+        <main>
+          <ProductTable />
+        </main>
+      </div>
     </>
   )
 };
