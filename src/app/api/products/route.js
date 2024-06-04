@@ -1,29 +1,31 @@
+import { ConnectionStr } from "@/app/utils/DB";
+import { ProductSchema } from "@/app/utils/ProductModel";
+import mongoose, { mongo } from "mongoose";
 import { NextResponse } from "next/server";
-import { connectionStr } from "@/utils/db";
-import mongoose from "mongoose";
-import { Product } from "@/utils/model/product";
 
-export async function GET(request) {
+export async function GET() {
     try {
-        await mongoose.connect(connectionStr)
-        const data = await Product.find()
-        console.log(data)
-        return NextResponse.json({ message: data, success: true }, { status: 200 })
+
+        await mongoose.connect(ConnectionStr)
+        const data = await ProductSchema.find()
+
+        return NextResponse.json({ message: data, success: true })
     } catch (error) {
-        return NextResponse.json({ message: error, success: false }, { status: 400, statusText: "request not resolve" })
+        console.log(error)
+        return NextResponse.json({ message: error, success: false })
     }
 }
 
-export async function POST(request) {
+export async function POST(request){
     try {
-        let payload = await request.json()
-        await mongoose.connect(connectionStr)
-        let product = new Product(payload)
-        const result = await product.save()
-    
-        return NextResponse.json({ message: result, success: true }, {status: 200})
+        const payload = await request.json()
+        await mongoose.connect(ConnectionStr);
+        const data = new ProductSchema(payload)
+        const result = await data.save()
+        
+        return NextResponse.json({message: result, success: true})
     } catch (error) {
-        return NextResponse.json({ message: error, success: false },  {status: 400})
+        console.log(error)
+        return NextResponse.json({message: error, success: false})
     }
 }
-
