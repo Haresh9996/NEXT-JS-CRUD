@@ -18,12 +18,12 @@ import {
     ModalBody,
     ModalFooter,
 } from "@nextui-org/react";
-import { NEXT_BASE_PUBLIC_URL } from "@/app/utils/DB";
 import { FaEye, FaEdit } from "react-icons/fa";
 import { FaDeleteLeft } from "react-icons/fa6";
 import Link from "next/link";
+import { NEXT_BASE_PUBLIC_URL } from "../utils/DB";
 
-
+console.log("base url ", NEXT_BASE_PUBLIC_URL)
 
 
 const statusColorMap = {
@@ -35,8 +35,6 @@ const statusColorMap = {
 export default function ProductTable() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    // const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    // const [deleteProductId, setDeleteProductId] = useState(null);
 
     useEffect(() => {
         fetchData();
@@ -44,7 +42,7 @@ export default function ProductTable() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/api/products`);
+            const response = await fetch("/api/products");
             const result = await response.json();
             if (result.success) {
                 setProducts(result.message);
@@ -58,45 +56,21 @@ export default function ProductTable() {
         }
     };
 
-    // const handleDeleteClick = (id) => {
-    //     setDeleteProductId(id);
-    //     setIsDeleteModalOpen(true);
-    // };
-
-    // const DeleteOne = async () => {
-    //     console.log(deleteProductId)
-        // try {
-            // const response = await fetch(`http://localhost:3000/api/products/${deleteProductId}`, {
-            //     method: "DELETE"
-            // });
-            // const result = await response.json();
-            // if (response.ok) {
-                // setProducts((prevProducts) => prevProducts.filter((product) => product._id !== deleteProductId));
-                // setIsDeleteModalOpen(false);
-            // } else {
-                // console.error("Failed to delete product:", result.message);
-            // }
-        // } catch (error) {
-        //     console.error("Error deleting product:", error);
-        // }
-    // };
-    const DeleteOne = async (id) => {
-        // console.log(deleteProductId)
+    const deleteOne = async (id) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/products/${id}`, {
+            const response = await fetch("/api/products/" + id, {
                 method: "DELETE"
-            });
-            if (response.ok) {
-                setProducts((prevProducts) => prevProducts.filter((product) => product._id !== deleteProductId));
-                // setIsDeleteModalOpen(false);
-                const result = await response.json();
-            } else {
-                console.error("Failed to delete product:", result.message);
+            })
+            const result = await response.json();
+            if (result.success) {
+                fetchData()
+                alert("product Deleted")
             }
+
         } catch (error) {
-            console.error("Error deleting product:", error);
+            console.log(error)
         }
-    };
+    }
 
     const renderCell = useCallback((product, columnKey) => {
         const cellValue = product[columnKey];
@@ -142,7 +116,7 @@ export default function ProductTable() {
                         </Tooltip>
                         <Tooltip color="danger" content="Delete product">
                             <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                                <Button isIconOnly color="danger" variant="light" onClick={() => DeleteOne(product._id)}>
+                                <Button isIconOnly color="danger" variant="light" onClick={() => deleteOne(product._id)} >
                                     <FaDeleteLeft />
                                 </Button>
                             </span>
@@ -177,22 +151,7 @@ export default function ProductTable() {
                     ))}
                 </TableBody>
             </Table>
-            {/* <Modal closeButton aria-labelledby="modal-title" open={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(true)} >
-                <ModalHeader className="flex flex-col gap-1">
-                    Confirm Deletion
-                </ModalHeader>
-                <ModalBody>
-                    <p>Are you sure you want to delete this product?</p>
-                </ModalBody>
-                <ModalFooter>
-                    <Button auto flat color="error" onClick={DeleteOne}>
-                        Delete
-                    </Button>
-                    <Button auto onClick={() => setIsDeleteModalOpen(false)}>
-                        Cancel
-                    </Button>
-                </ModalFooter>
-            </Modal> */}
+
         </div>
     );
 }
