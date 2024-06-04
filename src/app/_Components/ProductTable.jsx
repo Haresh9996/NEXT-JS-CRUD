@@ -1,6 +1,4 @@
-// src/components/ProductTable.js
-
-"use client";
+"use client"
 import React, { useEffect, useState, useCallback } from "react";
 import {
     Table,
@@ -17,14 +15,14 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
+    useDisclosure,
+    ModalContent,
 } from "@nextui-org/react";
 import { FaEye, FaEdit } from "react-icons/fa";
 import { FaDeleteLeft } from "react-icons/fa6";
 import Link from "next/link";
 import { NEXT_BASE_PUBLIC_URL } from "../utils/DB";
-
-console.log("base url ", NEXT_BASE_PUBLIC_URL)
-
+import { Toaster, toast } from "sonner";
 
 const statusColorMap = {
     available: "success",
@@ -35,6 +33,8 @@ const statusColorMap = {
 export default function ProductTable() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
     useEffect(() => {
         fetchData();
@@ -60,17 +60,29 @@ export default function ProductTable() {
         try {
             const response = await fetch("/api/products/" + id, {
                 method: "DELETE"
-            })
+            });
             const result = await response.json();
             if (result.success) {
-                fetchData()
-                alert("product Deleted")
+                fetchData();
+                // alert("Product Deleted");
+                toast.error('Product Deleted')
             }
-
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
+
+    const handleDelete = (product) => {
+        setSelectedProduct(product);
+        onOpen();
+    };
+
+    const confirmDelete = () => {
+        if (selectedProduct) {
+            deleteOne(selectedProduct._id);
+            onClose();
+        }
+    };
 
     const renderCell = useCallback((product, columnKey) => {
         const cellValue = product[columnKey];
@@ -116,7 +128,7 @@ export default function ProductTable() {
                         </Tooltip>
                         <Tooltip color="danger" content="Delete product">
                             <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                                <Button isIconOnly color="danger" variant="light" onClick={() => deleteOne(product._id)} >
+                                <Button isIconOnly color="danger" variant="light" onClick={() => handleDelete(product)}>
                                     <FaDeleteLeft />
                                 </Button>
                             </span>
@@ -152,6 +164,27 @@ export default function ProductTable() {
                 </TableBody>
             </Table>
 
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">Delete Product</ModalHeader>
+                            <ModalBody>
+                                <p>Are you sure you want to delete the product <strong>{selectedProduct?.name}</strong>?</p>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="danger" variant="light" onPress={onClose}>
+                                    Cancel
+                                </Button>
+                                <Button color="primary" onPress={confirmDelete}>
+                                    Delete
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
+            <Toaster position="top-right" richColors />
         </div>
     );
 }

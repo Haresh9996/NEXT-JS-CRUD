@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from "react";
 import { Input, Button, Dropdown, Spacer, Menu, MenuItem } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { Toaster, toast } from "sonner";
 
 
 export default function UpdateProduct({ id }) {
@@ -60,15 +61,19 @@ export default function UpdateProduct({ id }) {
             const result = await response.json();
 
             if (result.success) {
-                alert("Product updated successfully!");
+                // alert("");
+                router.push("/")
+                toast.info("Product updated successfully!")
             } else {
-                alert("Failed to update product:", result.message);
+                // alert("", );
+                toast.error("Failed to update product:", {
+                    description: result.message
+                })
             }
         } catch (error) {
             console.error("Error updating product:", error);
         } finally {
             setLoading(false);
-            router.push("/")
         }
     };
 
@@ -100,6 +105,7 @@ export default function UpdateProduct({ id }) {
                     Update Product
                 </Button>
             </form>
+            <Toaster position="top-right" richColors />
         </div>
     );
 }

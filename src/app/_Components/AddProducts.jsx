@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 import { Input, Button, Spacer } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { Toaster, toast } from "sonner";
 
 const statusOptions = ["available", "unavailable", "limited"];
 
@@ -39,7 +40,8 @@ export default function AddProduct() {
             const result = await response.json();
 
             if (result.success) {
-                alert("Product added successfully!");
+                // alert("Product added successfully!");
+                toast.success("Product added successfully!");
                 // Clear form
                 setName("");
                 setPrice("");
@@ -47,7 +49,11 @@ export default function AddProduct() {
                 setColor("");
                 setCategory("");
             } else {
-                alert("Failed to add product:", result.message);
+                // alert("Failed to add product:", result.message);
+                toast.error("Failed to add product:", {
+                    description: result.message
+                });
+
             }
         } catch (error) {
             console.error("Error adding product:", error);
@@ -85,6 +91,7 @@ export default function AddProduct() {
                     Add Product
                 </Button>
             </form>
+            <Toaster position="top-right" richColors />
         </div>
     );
 }
